@@ -1,4 +1,4 @@
-#include "../Headers/GenerateNewPainting.h"
+#include "../../../Headers/Graph/GraphPainting/GenerateNewPainting.h"
 
 
 #include <list>

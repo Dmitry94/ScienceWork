@@ -1,4 +1,4 @@
-#include "../Headers/Graph.h"
+#include "../../Headers/Graph/Graph.h"
 
 Graph::Graph(const std::string & rFileName, std::ios_base::openmode mode)
 

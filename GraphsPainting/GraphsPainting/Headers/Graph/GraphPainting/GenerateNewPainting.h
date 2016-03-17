@@ -3,9 +3,9 @@
 
 #include <list>
 
-#include "Graph.h"
 #include "GraphPaintingStructures.h"
-#include "Operation.h"
+#include "../Graph.h"
+#include "../../Operation.h"
 
 
 class GenerateNewPainting : public Operation<PartialPaint>

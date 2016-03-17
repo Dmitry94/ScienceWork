@@ -19,23 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\GenerateNewPainting.h" />
-    <ClInclude Include="Headers\Graph.h" />
-    <ClInclude Include="Headers\GraphPainting.h" />
-    <ClInclude Include="Headers\GraphPaintingStructures.h" />
-    <ClInclude Include="Headers\GraphProblem.h" />
-    <ClInclude Include="Headers\HTML_Logger\HTML.h" />
-    <ClInclude Include="Headers\HTML_Logger\HTML_Body.h" />
-    <ClInclude Include="Headers\HTML_Logger\HTML_Head.h" />
-    <ClInclude Include="Headers\HTML_Logger\HTML_Table.h" />
-    <ClInclude Include="Headers\HTML_Logger\HTML_Tag.h" />
+    <ClInclude Include="Headers\Graph\Graph.h" />
+    <ClInclude Include="Headers\Graph\GraphPainting\GenerateNewPainting.h" />
+    <ClInclude Include="Headers\Graph\GraphPainting\GraphPainting.h" />
+    <ClInclude Include="Headers\Graph\GraphPainting\GraphPaintingStructures.h" />
+    <ClInclude Include="Headers\Graph\GraphProblem.h" />
+    <ClInclude Include="Headers\HTML\HTML.h" />
+    <ClInclude Include="Headers\HTML\HTML_Body.h" />
+    <ClInclude Include="Headers\HTML\HTML_Head.h" />
+    <ClInclude Include="Headers\HTML\HTML_Logger.h" />
+    <ClInclude Include="Headers\HTML\HTML_Table.h" />
+    <ClInclude Include="Headers\HTML\HTML_Tag.h" />
     <ClInclude Include="Headers\IProblem.h" />
     <ClInclude Include="Headers\Node.h" />
     <ClInclude Include="Headers\Operation.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\GenerateNewPainting.cpp" />
-    <ClCompile Include="Source\Graph.cpp" />
+    <ClCompile Include="Source\Graph\Graph.cpp" />
+    <ClCompile Include="Source\Graph\GraphPainting\GenerateNewPainting.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -16,7 +16,7 @@ public:
 	}
 	std::string toString() const override
 	{
-		return "\<title\>" + m_Title + "\<\/title\>\n";
+		return "<title>" + m_Title + "<\/title>\n";
 	}
 private:
 	std::string m_Title = "";
@@ -32,7 +32,7 @@ public:
 	}
 	std::string toString() const override
 	{
-		return "\<meta " + m_Value + "\>\n";
+		return "<meta " + m_Value + ">\n";
 	}
 private:
 	std::string m_Value;
@@ -49,13 +49,13 @@ public:
 	}
 	std::string toString() const override
 	{
-		std::string answer = "\<head\>\n";
+		std::string answer = "<head>\n";
 		for (std::list<HTML_MetaTag>::const_iterator cIt = m_MetaTags.cbegin(); cIt != m_MetaTags.end(); cIt++)
 		{
 			answer += cIt->toString();
 		}
 		answer += m_Title.toString();
-		answer += "\<\/head\>\n";
+		answer += "<\/head>\n";
 		return answer;
 	}
 private:

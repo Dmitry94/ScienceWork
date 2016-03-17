@@ -18,12 +18,12 @@ public:
 	}
 	std::string toString() const override
 	{
-		std::string answer = "\<body\>\n";
+		std::string answer = "<body>\n";
 		for (std::list<const HTML_Tag *>::const_iterator cIt = m_Tags.cbegin(); cIt != m_Tags.cend(); cIt++)
 		{
 			answer += (*cIt)->toString();
 		}
-		answer += "\<\/body\>\n";
+		answer += "<\/body>\n";
 		return answer;
 	}
 	~HTML_Body()

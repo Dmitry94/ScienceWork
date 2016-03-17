@@ -10,8 +10,8 @@
 #include <boost/thread/shared_lock_guard.hpp>
 #include <boost/thread/condition_variable.hpp>
 
-#include "IProblem.h"
-#include "Operation.h"
+#include "../IProblem.h"
+#include "../Operation.h"
 #include "Graph.h"
 
 template <typename T, class Compare = less<typename std::vector<Node<T> *>::value_type>>
@@ -85,7 +85,9 @@ protected:
 			nodesQueue.pop();
 
 			if (isTimeToExit(*tmp))
+			{
 				return tmp->value;
+			}
 
 			for (typename vector<Operation<T> *>::const_iterator it = m_Operations->cbegin(); it != m_Operations->cend(); it++)
 			{
@@ -102,14 +104,14 @@ protected:
 
 	void AStarParallel(Node <T> *start)
 	{
-		priority_queue<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>, Compare> nodes;
-		nodes.push(start);
+		priority_queue<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>, Compare> nodesQueue;
+		nodesQueue.push(start);
 
-		while (!nodes.empty())
+		while (!nodesQueue.empty())
 		{
 			boost::upgrade_lock<boost::shared_mutex> lock(m_SharedMutex);
-			Node <T> *tmp = nodes.top();
-			nodes.pop();
+			Node <T> *tmp = nodesQueue.top();
+			nodesQueue.pop();
 
 			if (parallelAnswer.size() != 0)
 				return;
@@ -127,7 +129,7 @@ protected:
 				for (typename vector<T>::const_iterator it = values.cbegin(); it != values.cend(); it++)
 				{
 					Node <T> *new_Node = new Node <T>(*it, tmp, tmp->level + 1);
-					nodes.push(new_Node);
+					nodesQueue.push(new_Node);
 					tmp->sons.push_back(new_Node);
 				}
 			}

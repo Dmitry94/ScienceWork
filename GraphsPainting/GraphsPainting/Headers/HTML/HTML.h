@@ -9,18 +9,23 @@
 class HTML : public HTML_Tag
 {
 public:
-	HTML(const HTML_Head &head, const HTML_Body &body)
+	HTML() {}
+	HTML(HTML_Head *head, HTML_Body *body)
 	{
-		m_Head = head;
-		m_Body = body;
+		Head = head;
+		Body = body;
 	}
 	std::string toString() const override
 	{
-		return m_Head.toString() + m_Body.toString();
+		return Head->toString() + Body->toString();
 	}
-private:
-	HTML_Head m_Head;
-	HTML_Body m_Body;
+	~HTML()
+	{
+		delete Head;
+		delete Body;
+	}
+	HTML_Head *Head;
+	HTML_Body *Body;
 };
 
 #endif HTML_H

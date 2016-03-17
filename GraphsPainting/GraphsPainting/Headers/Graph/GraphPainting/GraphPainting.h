@@ -1,7 +1,7 @@
 #ifndef GRAPH_PAINTING_H
 #define GRAPH_PAINTING_H
 
-#include "GraphProblem.h"
+#include "../GraphProblem.h"
 #include "GraphPaintingStructures.h"
 #include "GenerateNewPainting.h"
 

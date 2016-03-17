@@ -21,6 +21,13 @@ public:
 	{
 		return m_Graph.size();
 	}
+	int getCountOfEdges() const
+	{
+		int answer = 0;
+		for (std::vector<std::list<int>>::const_iterator cIt = m_Graph.cbegin(); cIt != m_Graph.cend(); cIt++)
+			answer += cIt->size();
+		return answer / 2;
+	}
 	std::list<int> getAllAdjancentVertexes(int vertex) const;
 
 	/**************** STATIC *******************/
