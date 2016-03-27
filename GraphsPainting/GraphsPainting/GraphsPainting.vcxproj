@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\Amputation.h" />
     <ClInclude Include="Headers\Graph\Graph.h" />
     <ClInclude Include="Headers\Graph\GraphPainting\GenerateNewPainting.h" />
     <ClInclude Include="Headers\Graph\GraphPainting\GraphPainting.h" />
+    <ClInclude Include="Headers\Graph\GraphPainting\GraphPaintingAmputation.h" />
     <ClInclude Include="Headers\Graph\GraphPainting\GraphPaintingStructures.h" />
     <ClInclude Include="Headers\Graph\GraphProblem.h" />
     <ClInclude Include="Headers\HTML\HTML.h" />

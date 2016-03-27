@@ -4,7 +4,9 @@
 #define CONTAINER_FOR_QUEUE std::vector
 
 #include <queue>
+#include <stack>
 #include <thread>
+#include <algorithm>
 
 #include <boost/thread/shared_mutex.hpp>
 #include <boost/thread/shared_lock_guard.hpp>
@@ -12,139 +14,236 @@
 
 #include "../IProblem.h"
 #include "../Operation.h"
+#include "../Node.h"
+#include "../Amputation.h"
+
 #include "Graph.h"
 
 template <typename T, class Compare = less<typename std::vector<Node<T> *>::value_type>>
 class GraphProblem : public IProblem<T>
 {
 public:
-	GraphProblem(const Graph &graph, const std::vector<Operation<T> *> &operations)
+	GraphProblem(const Graph &graph)
 	{
 		m_pGraph = &graph;
-		m_Operations = &operations;
+		m_UsingAlgorithm = &GraphProblem::DFS;
 	}
 
-	T getAnswer(Node<T> *startNode) override
+	~GraphProblem()
 	{
-		return AStar(startNode);
+		std::for_each(m_Operations->begin(), m_Operations->end(), [](Operation<T> *op) { delete op; });
+		delete m_Operations;
+
+		std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<T> *amp) { delete amp; });
+		delete m_Amputations;
 	}
 
-	T getAnswerParallel(Node<T> *startNode) override
+	T getAnswer(const T &startValue, int countOfThreads = 1) override
 	{
-		// start A* while not enough nodes
+		// init, all memory will be deleted in algo
+		m_Answer = getObviousAnswer();
+		recalcAmputations();
+		Node<T> *startNode = new Node<T>(startValue, nullptr);
+
+		/********************** START A* WHILE NOT ENOUGH NODES FOR PARALLEL **********************/
+		// init
 		priority_queue<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>, Compare> nodesQueue;
 		nodesQueue.push(startNode);
 		int queueSize = 1;
-		while (queueSize < MAX_THREADS)
+		// main loop
+		while (queueSize < countOfThreads)
 		{
+			// if finished before collect enough
+			if (nodesQueue.empty())
+				return m_Answer;
+
+			// get next
 			Node <T> *tmp = nodesQueue.top();
 			nodesQueue.pop();
 			queueSize--;
 
-			if (isTimeToExit(*tmp))
-				return tmp->value;
+			// if current node need to be cut
+			if (isAnyAmputation(tmp->value))
+			{
+				delete tmp;
+				continue;
+			}
 
+			// check is it answer and skip. if it's then check is it better and assign if it is
+			if (isAnswer(tmp->value))
+			{
+				if (isBetterAnswer(m_Answer, tmp->value))
+				{
+					m_Answer = tmp->value;
+					recalcAmputations();
+				}
+				delete tmp;
+				continue;
+			}
+
+			// gen childs
 			for (typename vector<Operation<T> *>::const_iterator it = m_Operations->cbegin(); it != m_Operations->cend(); it++)
 			{
+				// get childs
 				vector<T> values = (*it)->getNextGeneration(tmp->value);
 				for (typename vector<T>::const_iterator it = values.cbegin(); it != values.cend(); it++)
 				{
+					// push child and bind with current Node
 					Node <T> *new_Node = new Node <T>(*it, tmp, tmp->level + 1);
 					nodesQueue.push(new_Node);
-					tmp->sons.push_back(new_Node);
 					queueSize++;
 				}
 			}
+
+			// free memory
+			delete tmp;
 		}
 
-		// if nodes >= MAX_THREADS then start parallel
+		/********************* IF WE COLLECT ENOUGH FOR PARALLEL ALGO, THEN START IT *********************/
 		vector <thread> threads;
+		// for each node run its thread
 		while(!nodesQueue.empty())
 		{
+			// get node
 			Node<T> *tmp = nodesQueue.top();
 			nodesQueue.pop();
-			for (int i = 0; i < MAX_THREADS; i++)
-			{
-				threads.push_back(thread(&GraphProblem::AStarParallel, this, tmp));
-			}
+			// run thread
+			threads.push_back(thread(m_UsingAlgorithm, this, tmp));
 		}
-
+		// wait for all threads
 		for_each(threads.begin(), threads.end(), mem_fun_ref(&thread::join));
 
-		return parallelAnswer;
+		// return result
+		return m_Answer;
 	}
 protected:
 	/******************************** METHODS ********************************/
-	T AStar(Node <T> *start) const
+	void AStar(Node <T> *start)
 	{
+		// init
 		priority_queue<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>, Compare> nodesQueue;
 		nodesQueue.push(start);
+		// main loop
 		while (!nodesQueue.empty())
 		{
-			Node <T> *tmp = nodesQueue.top();
-			nodesQueue.pop();
-
-			if (isTimeToExit(*tmp))
-			{
-				return tmp->value;
-			}
-
-			for (typename vector<Operation<T> *>::const_iterator it = m_Operations->cbegin(); it != m_Operations->cend(); it++)
-			{
-				vector<T> values = (*it)->getNextGeneration(tmp->value);
-				for (typename vector<T>::const_iterator it = values.cbegin(); it != values.cend(); it++)
-				{
-					Node <T> *new_Node = new Node <T>(*it, tmp, tmp->level + 1);
-					nodesQueue.push(new_Node);
-					tmp->sons.push_back(new_Node);
-				}
-			}
-		}
-	}
-
-	void AStarParallel(Node <T> *start)
-	{
-		priority_queue<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>, Compare> nodesQueue;
-		nodesQueue.push(start);
-
-		while (!nodesQueue.empty())
-		{
+			// get next, shared lock for answer
 			boost::upgrade_lock<boost::shared_mutex> lock(m_SharedMutex);
 			Node <T> *tmp = nodesQueue.top();
 			nodesQueue.pop();
 
-			if (parallelAnswer.size() != 0)
-				return;
-
-			if (isTimeToExit(*tmp))
+			// if current node need to be cut
+			if (isAnyAmputation(tmp->value))
 			{
-				boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
-				parallelAnswer = tmp->value;
-				return;
+				delete tmp;
+				continue;
 			}
 
+			// check is it answer then skip and it it's better than curAnswer, then lock and assign
+			if (isAnswer(tmp->value))
+			{
+				if (isBetterAnswer(m_Answer, tmp->value))
+				{
+					//boost::unique_lock<boost::shared_mutex> uniqueLock(m_SharedMutex);
+					boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
+					m_Answer = tmp->value;
+					recalcAmputations();
+				}
+				delete tmp;
+				continue;
+			}
+
+			// gen childs
 			for (typename vector<Operation<T> *>::const_iterator it = m_Operations->cbegin(); it != m_Operations->cend(); it++)
 			{
+				// get childs
 				vector<T> values = (*it)->getNextGeneration(tmp->value);
 				for (typename vector<T>::const_iterator it = values.cbegin(); it != values.cend(); it++)
 				{
+					// push child in queue and bind it with current
 					Node <T> *new_Node = new Node <T>(*it, tmp, tmp->level + 1);
 					nodesQueue.push(new_Node);
-					tmp->sons.push_back(new_Node);
 				}
 			}
+			// free mem
+			delete tmp;
 		}
 	}
+	void DFS(Node<T> *start)
+	{
+		// init
+		stack<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>> nodesStack;
+		nodesStack.push(start);
+		// main loop
+		while (!nodesStack.empty())
+		{
+			// get next, shared lock for answer
+			boost::upgrade_lock<boost::shared_mutex> lock(m_SharedMutex);
+			Node <T> *tmp = nodesStack.top();
+			nodesStack.pop();
+
+			// if current node need to be cut
+			if (isAnyAmputation(tmp->value))
+			{
+				delete tmp;
+				continue;
+			}
+
+			// check is it answer then skip and it it's better than curAnswer, then lock and assign
+			if (isAnswer(tmp->value))
+			{
+				if (isBetterAnswer(m_Answer, tmp->value))
+				{
+					//boost::unique_lock<boost::shared_mutex> uniqueLock(m_SharedMutex);
+					boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
+					m_Answer = tmp->value;
+					recalcAmputations();
+				}
+				delete tmp;
+				continue;
+			}
+
+			// gen childs
+			for (typename vector<Operation<T> *>::const_iterator it = m_Operations->cbegin(); it != m_Operations->cend(); it++)
+			{
+				// get childs
+				vector<T> values = (*it)->getNextGeneration(tmp->value);
+				for (typename vector<T>::const_iterator it = values.cbegin(); it != values.cend(); it++)
+				{
+					// push child in queue and bind it with current
+					Node <T> *new_Node = new Node <T>(*it, tmp, tmp->level + 1);
+					nodesStack.push(new_Node);
+				}
+			}
+			// free mem
+			delete tmp;
+		}
+	}
+	bool isAnyAmputation(const T &current) const
+	{
+		for (typename std::list<Amputation<T> *>::const_iterator cIt = m_Amputations->cbegin(); cIt != m_Amputations->cend(); cIt++)
+		{
+			if ((*cIt)->isNeedToAmputate(current))
+				return true;
+		}
+		return false;
+	}
+	
+	/******************************** Virtual methods ********************************/
+	virtual bool isBetterAnswer(const T &, const T &) const = 0;
+	virtual T getObviousAnswer() const = 0;
+	virtual void recalcAmputations() = 0;
 
 	/******************************** MEMBERS ********************************/
-	const int MAX_THREADS = 6;
-
 	const Graph *m_pGraph;
-	const std::vector<Operation<T> *> *m_Operations;
+	std::vector<Operation<T> *> *m_Operations;
+	std::list<Amputation<T> *> *m_Amputations;
 	boost::shared_mutex m_SharedMutex;
 
-	T parallelAnswer;
+	typedef void(GraphProblem::*Algo)(Node<T> *);
+	Algo m_UsingAlgorithm;
 
+	// when we change answer, we have to recalculate amputations
+	T m_Answer;
 };
 
 #endif /* GRAPH_PROBLEM_H */

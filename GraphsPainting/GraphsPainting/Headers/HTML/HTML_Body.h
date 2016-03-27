@@ -23,7 +23,7 @@ public:
 		{
 			answer += (*cIt)->toString();
 		}
-		answer += "<\/body>\n";
+		answer += "</body>\n";
 		return answer;
 	}
 	~HTML_Body()

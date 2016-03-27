@@ -20,7 +20,7 @@ std::vector<PartialPaint> GenerateNewPainting::getNextGeneration(const PartialPa
 		// calc what vertex is next
 		PartialPaint::const_iterator iter = --cr_curPainting.end();
 		int whoIsNext = (*iter).first + 1;
-		int maxColor = cr_curPainting.MaxColor;
+		int maxColor = cr_curPainting.ColorsCount;
 
 		// reserve memory for items
 		std::vector<PartialPaint> answer;
@@ -60,7 +60,7 @@ std::vector<PartialPaint> GenerateNewPainting::getNextGeneration(const PartialPa
 		{
 			PartialPaint tmp = cr_curPainting;
 			tmp.push_back(VertexColorPair(whoIsNext, maxColor));
-			tmp.MaxColor = maxColor + 1;
+			tmp.ColorsCount = maxColor + 1;
 			answer.push_back(tmp);
 		}
 

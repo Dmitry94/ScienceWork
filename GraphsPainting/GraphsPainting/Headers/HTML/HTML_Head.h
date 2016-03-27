@@ -16,7 +16,7 @@ public:
 	}
 	std::string toString() const override
 	{
-		return "<title>" + m_Title + "<\/title>\n";
+		return "<title>" + m_Title + "</title>\n";
 	}
 private:
 	std::string m_Title = "";
@@ -55,7 +55,7 @@ public:
 			answer += cIt->toString();
 		}
 		answer += m_Title.toString();
-		answer += "<\/head>\n";
+		answer += "</head>\n";
 		return answer;
 	}
 private:

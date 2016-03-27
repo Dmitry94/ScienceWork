@@ -66,6 +66,12 @@
     <ClInclude Include="Headers\Graph\GraphProblem.h">
       <Filter>Заголовочные файлы\Graph</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Amputation.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Graph\GraphPainting\GraphPaintingAmputation.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">

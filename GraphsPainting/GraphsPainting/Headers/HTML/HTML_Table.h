@@ -18,7 +18,7 @@ public:
 	}
 	std::string toString() const override
 	{
-		return "<td>" + m_Td + "<\/td>";
+		return "<td>" + m_Td + "</td>";
 	}
 private:
 	std::string m_Td;
@@ -35,7 +35,7 @@ public:
 	}
 	std::string toString() const override
 	{
-		return "<th>" + m_Th + "<\/th>";
+		return "<th>" + m_Th + "</th>";
 	}
 private:
 	std::string m_Th;
@@ -57,7 +57,7 @@ public:
 		{
 			answer += (*cIt)->toString();
 		}
-		answer += "<\/tr>\n";
+		answer += "</tr>\n";
 		return answer;
 	}
 	~HTML_Tr()
@@ -82,7 +82,7 @@ public:
 	}
 	std::string toString() const override
 	{
-		return "<caption>" + m_Caption + "<\/caption>\n";
+		return "<caption>" + m_Caption + "</caption>\n";
 	}
 private:
 	std::string m_Caption;
@@ -107,7 +107,7 @@ public:
 		{
 			answer += cIt->toString();
 		}
-		answer += "<\/table>\n";
+		answer += "</table>\n";
 		return answer;
 	}
 private:
