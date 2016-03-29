@@ -102,7 +102,6 @@ public:
 		// for each node run its thread
 		while(!nodesQueue.empty())
 		{
-			// if we have queueSize > countOfThreads, we have to run tasks by groups with size = countOfThreads
 			if (queueSize > countOfThreads)
 			{
 				for (int i = 0; i < countOfThreads; i++)
@@ -114,7 +113,6 @@ public:
 					// run thread
 					threads.push_back(thread(m_UsingAlgorithm, this, tmp));
 				}
-				// wait for all threads and clear
 				for_each(threads.begin(), threads.end(), mem_fun_ref(&thread::join));
 				threads.clear();
 			}
@@ -127,9 +125,8 @@ public:
 				threads.push_back(thread(m_UsingAlgorithm, this, tmp));
 			}
 		}
-		// wait for all threads and clear
+		// wait for all threads
 		for_each(threads.begin(), threads.end(), mem_fun_ref(&thread::join));
-		threads.clear();
 
 		// return result
 		return m_Answer;
