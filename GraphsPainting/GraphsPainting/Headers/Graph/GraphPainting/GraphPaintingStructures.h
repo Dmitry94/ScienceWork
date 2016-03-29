@@ -10,7 +10,6 @@ typedef std::pair<int, int> VertexColorPair;
 struct PartialPaint : public std::list<VertexColorPair>
 {
 	int ColorsCount = 1;
-	int CountOfVertexes = 0;
 	PartialPaint(int count, VertexColorPair elem) : std::list<VertexColorPair>(count, elem) {}
 	PartialPaint() : std::list<VertexColorPair>() {}
 };

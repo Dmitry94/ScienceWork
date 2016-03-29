@@ -13,7 +13,7 @@ public:
 	}
 	bool isNeedToAmputate(const PartialPaint& painting) const override
 	{
-		return painting.ColorsCount > m_CurAnswer.ColorsCount;
+		return painting.ColorsCount >= m_CurAnswer.ColorsCount;
 	}
 
 private:

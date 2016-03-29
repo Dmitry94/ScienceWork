@@ -65,6 +65,7 @@ public:
 		std::ofstream out(fname);
 		out << "<!DOCTYPE html>\n" + m_Html->toString();
 		out.close();
+		m_Html->Body->clear();
 	}
 
 	~HTML_Logger()

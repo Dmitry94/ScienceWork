@@ -14,11 +14,8 @@ public:
 	GraphPainting(const Graph &graph)
 		: GraphProblem<PartialPaint, PaintingRating>(graph)
 	{
-		Operation<PartialPaint> *operation = new GenerateNewPainting(graph);
-		m_Operations = new std::vector<Operation<PartialPaint> *>(1, operation);
-
-		Amputation<PartialPaint> *amputation = new GraphPaintingAmputation(m_Answer);
-		m_Amputations = new std::list<Amputation<PartialPaint> *>(1, amputation);
+		initOperations();
+		recalcAmputations();
 	}
 protected:
 	bool isAnswer(const PartialPaint &value) const override
@@ -36,13 +33,25 @@ protected:
 		answer.ColorsCount = m_pGraph->getSize() + 1;
 		return answer;
 	}
-	void recalcAmputations()
+	void recalcAmputations() override
 	{
-		std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<PartialPaint> *amp) { delete amp; });
-		delete m_Amputations;
-
 		Amputation<PartialPaint> *amputation = new GraphPaintingAmputation(m_Answer);
-		m_Amputations = new std::list<Amputation<PartialPaint> *>(1, amputation);
+
+		if (m_Amputations != nullptr)
+		{
+			std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<PartialPaint> *amp) { delete amp; });
+			m_Amputations->clear();
+			m_Amputations->push_back(amputation);
+		}
+		else
+		{
+			m_Amputations = new std::list<Amputation<PartialPaint> *>(1, amputation);
+		}
+	}
+	void initOperations() override
+	{
+		Operation<PartialPaint> *operation = new GenerateNewPainting(*m_pGraph);
+		m_Operations = new std::vector<Operation<PartialPaint> *>(1, operation);
 	}
 };
 

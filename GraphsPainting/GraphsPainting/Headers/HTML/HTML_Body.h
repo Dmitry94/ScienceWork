@@ -16,6 +16,10 @@ public:
 	{
 		m_Tags.push_back(tag);
 	}
+	void clear()
+	{
+		m_Tags.clear();
+	}
 	std::string toString() const override
 	{
 		std::string answer = "<body>\n";

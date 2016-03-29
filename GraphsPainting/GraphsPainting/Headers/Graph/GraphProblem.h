@@ -28,7 +28,6 @@ public:
 		m_pGraph = &graph;
 		m_UsingAlgorithm = &GraphProblem::DFS;
 	}
-
 	~GraphProblem()
 	{
 		std::for_each(m_Operations->begin(), m_Operations->end(), [](Operation<T> *op) { delete op; });
@@ -37,7 +36,6 @@ public:
 		std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<T> *amp) { delete amp; });
 		delete m_Amputations;
 	}
-
 	T getAnswer(const T &startValue, int countOfThreads = 1) override
 	{
 		// init, all memory will be deleted in algo
@@ -104,11 +102,28 @@ public:
 		// for each node run its thread
 		while(!nodesQueue.empty())
 		{
-			// get node
-			Node<T> *tmp = nodesQueue.top();
-			nodesQueue.pop();
-			// run thread
-			threads.push_back(thread(m_UsingAlgorithm, this, tmp));
+			if (queueSize > countOfThreads)
+			{
+				for (int i = 0; i < countOfThreads; i++)
+				{
+					// get node
+					Node<T> *tmp = nodesQueue.top();
+					nodesQueue.pop();
+					queueSize--;
+					// run thread
+					threads.push_back(thread(m_UsingAlgorithm, this, tmp));
+				}
+				for_each(threads.begin(), threads.end(), mem_fun_ref(&thread::join));
+				threads.clear();
+			}
+			else
+			{
+				// get node
+				Node<T> *tmp = nodesQueue.top();
+				nodesQueue.pop();
+				// run thread
+				threads.push_back(thread(m_UsingAlgorithm, this, tmp));
+			}
 		}
 		// wait for all threads
 		for_each(threads.begin(), threads.end(), mem_fun_ref(&thread::join));
@@ -143,7 +158,6 @@ protected:
 			{
 				if (isBetterAnswer(m_Answer, tmp->value))
 				{
-					//boost::unique_lock<boost::shared_mutex> uniqueLock(m_SharedMutex);
 					boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 					m_Answer = tmp->value;
 					recalcAmputations();
@@ -232,6 +246,7 @@ protected:
 	virtual bool isBetterAnswer(const T &, const T &) const = 0;
 	virtual T getObviousAnswer() const = 0;
 	virtual void recalcAmputations() = 0;
+	virtual void initOperations() = 0;
 
 	/******************************** MEMBERS ********************************/
 	const Graph *m_pGraph;

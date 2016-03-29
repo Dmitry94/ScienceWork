@@ -24,12 +24,15 @@ inline void printStat(const PartialPaint &partialPaint, const Graph &graph, doub
 int main() {
 	srand((unsigned)(time(NULL)));
 
-	list<string> headers = { "Count of Vertexes", "Count of Edges", "AStar Time", "Parallel AStar Time", "AStar Result", "Parallel AStar Result" };
+	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", "100 thread Time", "Result"};
 	HTML_Logger log(headers);
+	int minVertexCount = 20;
+	int maxVertexCount = 55;
+	int threadsCount = 24;
 
 	cout << "Calculating..." << endl;
 
-	for (int count = 20; count < 45; count++)
+	for (int count = minVertexCount; count < maxVertexCount; count++)
 	{
 		cout << "Current graph has " << count << " vertexes..." << endl;
 
@@ -42,39 +45,48 @@ int main() {
 		PartialPaint answer, parallelAnswer;
 		bool isGood;
 
+		// Simple code
 		if (count <= 30)
 		{
-			// Simple code
 			start_time = clock();
-			answer = solver.getAnswer(start);
+				answer = solver.getAnswer(start);
 			end_time = clock();
+
 			SimpleTime = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-			//printStat(answer, graph, AStarTime, false);
 			isGood = GenerateNewPainting::isRightPainting(answer, graph);
 			if (!isGood)
+			{
 				cout << "ERROR" << endl;
+				return 1;
+			}
 		}
 
 		
 
 		// Parallel code
 		start_time = clock();
-		parallelAnswer = solver.getAnswer(start, 100);
+			parallelAnswer = solver.getAnswer(start, threadsCount);
 		end_time = clock();
+		
+		// calc time
 		ParallelTime = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-		//printStat(parallelAnswer, graph, ParallelAStarTime, true);
+		
+		// check
 		isGood = GenerateNewPainting::isRightPainting(parallelAnswer, graph);
 		if (!isGood)
+		{
 			cout << "ERROR" << endl;
+			return 1;
+		}
 
+		// update logfile
 		list<string> curResults = { to_string(graph.getSize()), to_string(graph.getCountOfEdges())
 			, to_string(SimpleTime) + " sec" ,to_string(ParallelTime) + " sec"
-			, to_string(answer.ColorsCount) + " colors", to_string(parallelAnswer.ColorsCount) + " colors" };
+			, to_string(parallelAnswer.ColorsCount) + " colors"};
 
 		log.addLogLine(curResults);
+		log.createFile("@../../res.html");
 	}
-
-	log.createFile("@../../res.html");
 
 	std::system("pause");
 	return 0;
