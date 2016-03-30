@@ -1,16 +1,13 @@
 #ifndef GRAPH_PROBLEM_H
 #define GRAPH_PROBLEM_H
 
-#define CONTAINER_FOR_QUEUE std::vector
+#define CONTAINER_FOR_QUEUE std::deque
 
 #include <queue>
 #include <stack>
 #include <thread>
 #include <algorithm>
-
-#include <boost/thread/shared_mutex.hpp>
-#include <boost/thread/shared_lock_guard.hpp>
-#include <boost/thread/condition_variable.hpp>
+#include <mutex> 
 
 #include "../IProblem.h"
 #include "../Operation.h"
@@ -145,26 +142,29 @@ protected:
 		while (!nodesQueue.empty())
 		{
 			// get next, shared lock for answer
-			boost::upgrade_lock<boost::shared_mutex> lock(m_SharedMutex);
 			Node <T> *tmp = nodesQueue.top();
 			nodesQueue.pop();
 
+			m_Mutex.lock();
 			// if current node need to be cut
 			if (isAnyAmputation(tmp->value))
 			{
 				delete tmp;
+				m_Mutex.unlock();
 				continue;
 			}
+			m_Mutex.lock();
 
 			// check is it answer then skip and it it's better than curAnswer, then lock and assign
 			if (isAnswer(tmp->value))
 			{
+				m_Mutex.lock();
 				if (isBetterAnswer(m_Answer, tmp->value))
 				{
-					boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 					m_Answer = tmp->value;
 					recalcAmputations();
 				}
+				m_Mutex.unlock();
 				delete tmp;
 				continue;
 			}
@@ -194,27 +194,29 @@ protected:
 		while (!nodesStack.empty())
 		{
 			// get next, shared lock for answer
-			boost::upgrade_lock<boost::shared_mutex> lock(m_SharedMutex);
 			Node <T> *tmp = nodesStack.top();
 			nodesStack.pop();
 
 			// if current node need to be cut
+			m_Mutex.lock();
 			if (isAnyAmputation(tmp->value))
 			{
 				delete tmp;
+				m_Mutex.unlock();
 				continue;
 			}
+			m_Mutex.unlock();
 
 			// check is it answer then skip and it it's better than curAnswer, then lock and assign
 			if (isAnswer(tmp->value))
 			{
+				m_Mutex.lock();
 				if (isBetterAnswer(m_Answer, tmp->value))
 				{
-					//boost::unique_lock<boost::shared_mutex> uniqueLock(m_SharedMutex);
-					boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 					m_Answer = tmp->value;
 					recalcAmputations();
 				}
+				m_Mutex.unlock();
 				delete tmp;
 				continue;
 			}
@@ -255,7 +257,7 @@ protected:
 	const Graph *m_pGraph;
 	std::vector<Operation<T> *> *m_Operations;
 	std::list<Amputation<T> *> *m_Amputations;
-	boost::shared_mutex m_SharedMutex;
+	std::mutex m_Mutex;
 
 	typedef void(GraphProblem::*Algo)(Node<T> *);
 	Algo m_UsingAlgorithm;
