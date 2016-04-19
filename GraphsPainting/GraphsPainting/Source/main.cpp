@@ -26,10 +26,10 @@ int main() {
 
 	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", "24 thread Time", "Performance"};
 	HTML_Logger log(headers);
-	int minVertexCount = 20;
-	int maxVertexCount = 40;
+	int minVertexCount = 30;
+	int maxVertexCount = 50;
 	int threadsCount = 6;
-	double countOfPatterns = 5.0;
+	double countOfPatterns = 2.0;
 
 	cout << "Calculating..." << endl;
 
@@ -53,7 +53,8 @@ int main() {
 
 			// Simple code
 			start_time = clock();
-			answer = solver.getAnswer(start);
+			//answer = solver.getAnswer(start);
+			int colorsCount = answer.ColorsCount;
 			end_time = clock();
 
 			oneThreadTimeAverage += (double)(end_time - start_time) / CLOCKS_PER_SEC;
@@ -69,14 +70,14 @@ int main() {
 
 			// Parallel code
 			start_time = clock();
-			parallelAnswer = solver.getAnswer(start, threadsCount);
+			parallelAnswer = solver.getAnswerParallel(start, threadsCount);
 			end_time = clock();
 
 			// calc time
 			manyThreadTimeAverage += (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
 			// check
-			isGood = GenerateNewPainting::isRightPainting(parallelAnswer, graph);
+			isGood = GenerateNewPainting::isRightPainting(parallelAnswer, graph) && colorsCount == answer.ColorsCount;
 			if (!isGood)
 			{
 				cout << "ERROR" << endl;

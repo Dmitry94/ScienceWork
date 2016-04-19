@@ -5,7 +5,8 @@ template <typename T>
 class IProblem
 {
 public:
-	virtual T getAnswer(const T&, int) = 0;
+	virtual T getAnswerParallel(const T&, int) = 0;
+	virtual T getAnswer(const T&) = 0;
 	virtual ~IProblem() {}
 protected:
 	virtual bool isAnswer(const T &) const = 0;

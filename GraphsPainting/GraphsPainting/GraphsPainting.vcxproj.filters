@@ -70,7 +70,7 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Headers\Graph\GraphPainting\GraphPaintingAmputation.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Заголовочные файлы\Graph\GraphPainting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
