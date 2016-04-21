@@ -30,42 +30,36 @@ public:
 		std::for_each(m_Operations->begin(), m_Operations->end(), [](Operation<T> *op) { delete op; });
 		delete m_Operations;
 
-		//std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<T> *amp) { delete amp; });
-		//delete m_Amputations;
+		std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<T> *amp) { delete amp; });
+		delete m_Amputations;
 	}
-	T getAnswer(const T &startValue) override
+	T getAnswer(const T &startValue)
 	{
 		Node<T> *startNode = new Node<T>(startValue, nullptr);
-		m_Answers = std::vector<T>(1);
-		T answer = getObviousAnswer();
-		std::list<Amputation<T> *> amputations = recalcAmputations(answer);
-		DFS(startNode, amputations, answer, 0);
-		return m_Answers[0];
+		m_Answer = getObviousAnswer();
+		recalcAmputations();
+		DFS(startNode);
+		return m_Answer;
 	}
 	T getAnswerParallel(const T &startValue, int countOfThreads = 1) override
 	{
-		// count of nodes, which we will generate for DFS
-		int countOfNodes = countOfThreads * 2;
-		// answer, which we will be update
-		T answer = getObviousAnswer();
-		// init amputations
-		std::list<Amputation<T> *> amputations = recalcAmputations(answer);
-		// array for partial answers from threads
-		m_Answers = std::vector<T>(countOfThreads);
 		// init, all memory will be deleted in algo
+		m_Answer = getObviousAnswer();
+		recalcAmputations();
 		Node<T> *startNode = new Node<T>(startValue, nullptr);
+		int countOfStartNodes = countOfThreads;
 
 		/********************** START A* WHILE NOT ENOUGH NODES FOR PARALLEL **********************/
 		// init
 		priority_queue<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>, Compare> nodesQueue;
 		nodesQueue.push(startNode);
 		int queueSize = 1;
-		// main loop, while not collect enough nodes or find min answer
-		while (queueSize < countOfNodes)
+		// main loop
+		while (queueSize < countOfStartNodes)
 		{
 			// if finished before collect enough
 			if (nodesQueue.empty())
-				return answer;
+				return m_Answer;
 
 			// get next
 			Node <T> *tmp = nodesQueue.top();
@@ -73,7 +67,7 @@ public:
 			queueSize--;
 
 			// if current node need to be cut
-			if (isAnyAmputation(amputations, tmp->value))
+			if (isAnyAmputation(tmp->value))
 			{
 				delete tmp;
 				continue;
@@ -82,11 +76,10 @@ public:
 			// check is it answer and skip. if it's then check is it better and assign if it is
 			if (isAnswer(tmp->value))
 			{
-				if (isBetterAnswer(answer, tmp->value))
+				if (isBetterAnswer(m_Answer, tmp->value))
 				{
-					answer = tmp->value;
-					std::for_each(amputations.begin(), amputations.end(), [](Amputation<T> *amp) { delete amp; });
-					amputations = recalcAmputations(answer);
+					m_Answer = tmp->value;
+					recalcAmputations();
 				}
 				delete tmp;
 				continue;
@@ -111,9 +104,9 @@ public:
 		}
 
 		/********************* IF WE COLLECT ENOUGH FOR PARALLEL ALGO, THEN START IT *********************/
-		vector <thread> threads;
+		vector <thread> threads(countOfThreads);
 		// for each node run its thread
-		while(!nodesQueue.empty())
+		while (!nodesQueue.empty())
 		{
 			// if we have queueSize > countOfThreads, we have to run tasks by groups with size = countOfThreads
 			if (queueSize > countOfThreads)
@@ -125,36 +118,27 @@ public:
 					nodesQueue.pop();
 					queueSize--;
 					// run thread
-					threads.push_back(thread(m_UsingAlgorithm, this, tmp, amputations, answer, i));
+					threads[i] = thread(m_UsingAlgorithm, this, tmp);
 				}
 			}
 			else
 			{
+				int i = 0;
 				while (!nodesQueue.empty())
 				{
-					int i = 0;
 					// get node
 					Node<T> *tmp = nodesQueue.top();
 					nodesQueue.pop();
 					// run thread
-					threads.push_back(thread(m_UsingAlgorithm, this, tmp, amputations, answer, i++));
+					threads[i++] = thread(m_UsingAlgorithm, this, tmp);
 				}
 			}
-
-			// wait for all threads and clear
-			for_each(threads.begin(), threads.end(), mem_fun_ref(&thread::join));
-			threads.clear();
-			// find the best answer from all
-			for (int i = 0; i < m_Answers.size(); i++)
-			{
-				if (isBetterAnswer(answer, m_Answers[i]))
-					answer = m_Answers[i];
-			}
-			amputations = recalcAmputations(answer);
+			for_each(threads.begin(), threads.end(), [](thread &t) { if (t.joinable()) t.join(); });
 		}
-
+		
+		threads.clear();
 		// return result
-		return answer;
+		return m_Answer;
 	}
 protected:
 	/******************************** METHODS ********************************/
@@ -210,7 +194,7 @@ protected:
 			delete tmp;
 		}
 	}
-	void DFS(Node<T> *start, std::list<Amputation<T> *> amputations, T curAnswer, int threadNum)
+	void DFS(Node<T> *start)
 	{
 		// init
 		stack<Node <T>*, CONTAINER_FOR_QUEUE<Node <T>*>> nodesStack;
@@ -223,21 +207,25 @@ protected:
 			nodesStack.pop();
 
 			// if current node need to be cut
-			if (isAnyAmputation(amputations, tmp->value))
+			m_Mutex.lock();
+			if (isAnyAmputation(tmp->value))
 			{
 				delete tmp;
+				m_Mutex.unlock();
 				continue;
 			}
+			m_Mutex.unlock();
 
 			// check is it answer then skip and it it's better than curAnswer, then lock and assign
 			if (isAnswer(tmp->value))
 			{
-				if (isBetterAnswer(curAnswer, tmp->value))
+				m_Mutex.lock();
+				if (isBetterAnswer(m_Answer, tmp->value))
 				{
-					curAnswer = tmp->value;
-					//std::for_each(amputations.begin(), amputations.end(), [](Amputation<T> *amp) { delete amp; });
-					amputations = recalcAmputations(curAnswer);
+					m_Answer = tmp->value;
+					recalcAmputations();
 				}
+				m_Mutex.unlock();
 				delete tmp;
 				continue;
 			}
@@ -257,36 +245,34 @@ protected:
 			// free mem
 			delete tmp;
 		}
-		m_Answers[threadNum] = curAnswer;
 	}
-	bool isAnyAmputation(const std::list<Amputation<T> *> &amputations, const T &current) const
+	bool isAnyAmputation(const T &current) const
 	{
-		for (typename std::list<Amputation<T> *>::const_iterator cIt = amputations.cbegin(); cIt != amputations.cend(); cIt++)
+		for (typename std::list<Amputation<T> *>::const_iterator cIt = m_Amputations->cbegin(); cIt != m_Amputations->cend(); cIt++)
 		{
 			if ((*cIt)->isNeedToAmputate(current))
 				return true;
 		}
 		return false;
 	}
-	
+
 	/******************************** Virtual methods ********************************/
 	virtual bool isBetterAnswer(const T &, const T &) const = 0;
 	virtual T getObviousAnswer() const = 0;
-	virtual std::list<Amputation<T> *> recalcAmputations(const T&) = 0;
+	virtual void recalcAmputations() = 0;
 	virtual void initOperations() = 0;
 
 	/******************************** MEMBERS ********************************/
 	const Graph *m_pGraph;
 	std::vector<Operation<T> *> *m_Operations;
-	//std::list<Amputation<T> *> *m_Amputations;
+	std::list<Amputation<T> *> *m_Amputations;
 	std::mutex m_Mutex;
 
-	typedef void(GraphProblem::*Algo)(Node<T> *, std::list<Amputation<T> *>, T, int);
+	typedef void(GraphProblem::*Algo)(Node<T> *);
 	Algo m_UsingAlgorithm;
-	std::vector<T> m_Answers;
 
 	// when we change answer, we have to recalculate amputations
-	//T m_Answer;
+	T m_Answer;
 };
 
 #endif /* GRAPH_PROBLEM_H */

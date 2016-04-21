@@ -32,11 +32,20 @@ protected:
 		answer.ColorsCount = m_pGraph->getSize() + 1;
 		return answer;
 	}
-	std::list<Amputation<PartialPaint> *> recalcAmputations(const PartialPaint &answer) override
+	void recalcAmputations() override
 	{
-		Amputation<PartialPaint> *amputation = new GraphPaintingAmputation(answer);
-		std::list<Amputation<PartialPaint> *> amputations(1, amputation);
-		return amputations;
+		Amputation<PartialPaint> *amputation = new GraphPaintingAmputation(m_Answer);
+
+		if (m_Amputations != nullptr)
+		{
+			std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<PartialPaint> *amp) { delete amp; });
+			m_Amputations->clear();
+			m_Amputations->push_back(amputation);
+		}
+		else
+		{
+			m_Amputations = new std::list<Amputation<PartialPaint> *>(1, amputation);
+		}
 	}
 	void initOperations() override
 	{

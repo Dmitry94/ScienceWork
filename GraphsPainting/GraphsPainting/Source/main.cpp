@@ -24,12 +24,13 @@ inline void printStat(const PartialPaint &partialPaint, const Graph &graph, doub
 int main() {
 	srand((unsigned)(time(NULL)));
 
-	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", "24 thread Time", "Performance"};
-	HTML_Logger log(headers);
 	int minVertexCount = 30;
 	int maxVertexCount = 50;
-	int threadsCount = 6;
-	double countOfPatterns = 2.0;
+	int threadsCount = 18;
+	double countOfPatterns = 5.0;
+
+	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", to_string(threadsCount) + " thread Time", "Performance" };
+	HTML_Logger log(headers);
 
 	cout << "Calculating..." << endl;
 
@@ -53,7 +54,7 @@ int main() {
 
 			// Simple code
 			start_time = clock();
-			//answer = solver.getAnswer(start);
+			answer = solver.getAnswer(start);
 			int colorsCount = answer.ColorsCount;
 			end_time = clock();
 
