@@ -1,7 +1,7 @@
 #ifndef GRAPH_PAINTING_AMPUTATION_H
 #define GRAPH_PAINTING_AMPUTATION_H
 
-#include "../../Amputation.h"
+#include "../TreeAlgsParallization/Amputation.h"
 #include "GraphPaintingStructures.h"
 
 class GraphPaintingAmputation : public Amputation<PartialPaint>

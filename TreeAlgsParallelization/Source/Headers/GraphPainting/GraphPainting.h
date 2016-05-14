@@ -1,18 +1,17 @@
 #ifndef GRAPH_PAINTING_H
 #define GRAPH_PAINTING_H
 
-#include "../GraphProblem.h"
+#include "../TreeAlgsParallization/TreeProblemSolver.h"
 
 #include "GraphPaintingStructures.h"
-#include "GenerateNewPainting.h"
-
+#include "GraphPaintingGenerator.h"
 #include "GraphPaintingAmputation.h"
 
-class GraphPainting : public GraphProblem<PartialPaint, PaintingRating>
+class GraphPainting : public TreeProblemSolver<PartialPaint, PaintingRating>
 {
 public:
 	GraphPainting(const Graph &graph)
-		: GraphProblem<PartialPaint, PaintingRating>(graph)
+		: TreeProblemSolver<PartialPaint, PaintingRating>(graph)
 	{
 		initOperations();
 	}
@@ -49,7 +48,7 @@ protected:
 	}
 	void initOperations() override
 	{
-		Operation<PartialPaint> *operation = new GenerateNewPainting(*m_pGraph);
+		Operation<PartialPaint> *operation = new GraphPaintingGenerator(*m_pGraph);
 		m_Operations = new std::vector<Operation<PartialPaint> *>(1, operation);
 	}
 };

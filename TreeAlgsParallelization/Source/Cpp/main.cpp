@@ -2,10 +2,10 @@
 #include <time.h>
 #include <vector>
 
-#include "../Headers/Node.h"
+#include "../Headers/TreeAlgsParallization/Node.h"
+#include "../Headers/TreeAlgsParallization/Graph.h"
 
-#include "../Headers/Graph/Graph.h"
-#include "../Headers/Graph/GraphPainting/GraphPainting.h"
+#include "../Headers/GraphPainting/GraphPainting.h"
 
 #include "../Headers/HTML/HTML_Logger.h"
 
@@ -13,7 +13,7 @@ using namespace std;
 
 inline void printStat(const PartialPaint &partialPaint, const Graph &graph, double time, bool isParallel)
 {
-	bool isGood = GenerateNewPainting::isRightPainting(partialPaint, graph);
+	bool isGood = GraphPaintingGenerator::isRightPainting(partialPaint, graph);
 	cout << "For count = " + to_string(partialPaint.size()) << ", ";
 	cout << (isGood ? "Everything is Ok" : "Bad answer") << (isParallel ? " in parallel" : "") << endl;
 	cout << "Time = ";
@@ -25,9 +25,9 @@ int main() {
 	srand((unsigned)(time(NULL)));
 
 	int minVertexCount = 30;
-	int maxVertexCount = 50;
+	int maxVertexCount = 70;
 	int threadsCount = 18;
-	double countOfPatterns = 5.0;
+	double countOfPatterns = 3.0;
 
 	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", to_string(threadsCount) + " thread Time", "Performance" };
 	HTML_Logger log(headers);
@@ -60,7 +60,7 @@ int main() {
 
 			oneThreadTimeAverage += (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
-			isGood = GenerateNewPainting::isRightPainting(answer, graph);
+			isGood = GraphPaintingGenerator::isRightPainting(answer, graph);
 			if (!isGood)
 			{
 				cout << "ERROR" << endl;
@@ -78,7 +78,7 @@ int main() {
 			manyThreadTimeAverage += (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
 			// check
-			isGood = GenerateNewPainting::isRightPainting(parallelAnswer, graph) && colorsCount == answer.ColorsCount;
+			isGood = GraphPaintingGenerator::isRightPainting(parallelAnswer, graph) && colorsCount == answer.ColorsCount;
 			if (!isGood)
 			{
 				cout << "ERROR" << endl;

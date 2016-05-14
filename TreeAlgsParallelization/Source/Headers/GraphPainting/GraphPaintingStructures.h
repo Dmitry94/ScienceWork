@@ -3,7 +3,7 @@
 
 #include <list>
 
-#include "../../Node.h"
+#include "../TreeAlgsParallization/Node.h"
 
 typedef std::pair<int, int> VertexColorPair;
 

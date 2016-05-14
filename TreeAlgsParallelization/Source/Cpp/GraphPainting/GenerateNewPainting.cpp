@@ -1,5 +1,6 @@
-#include "../../../Headers/Graph/GraphPainting/GenerateNewPainting.h"
-
+#include "../../Headers/GraphPainting/GraphPaintingGenerator.h"
+#include "../../Headers/TreeAlgsParallization/Graph.h"
+#include "../../Cpp/Graph.cpp"
 
 #include <list>
 #include <vector>
@@ -9,12 +10,12 @@
 using namespace std;
 
 
-GenerateNewPainting::GenerateNewPainting(const Graph & sourceGraph)
+GraphPaintingGenerator::GraphPaintingGenerator(const Graph & sourceGraph)
 {
 	m_pGraph = &sourceGraph;
 }
 
-std::vector<PartialPaint> GenerateNewPainting::getNextGeneration(const PartialPaint & cr_curPainting) const
+std::vector<PartialPaint> GraphPaintingGenerator::getNextGeneration(const PartialPaint & cr_curPainting) const
 {
 	{
 		// calc what vertex is next
@@ -68,7 +69,7 @@ std::vector<PartialPaint> GenerateNewPainting::getNextGeneration(const PartialPa
 	}
 }
 
-bool GenerateNewPainting::isRightPainting(const PartialPaint & painting, const Graph & graph)
+bool GraphPaintingGenerator::isRightPainting(const PartialPaint & painting, const Graph & graph)
 {
 	{
 		for (PartialPaint::const_iterator it = painting.cbegin(); it != painting.cend(); it++)

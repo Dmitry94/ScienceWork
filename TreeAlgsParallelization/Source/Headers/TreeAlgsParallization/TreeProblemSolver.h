@@ -1,5 +1,5 @@
-#ifndef GRAPH_PROBLEM_H
-#define GRAPH_PROBLEM_H
+#ifndef TREE_PROBLEM_SOLVER_H
+#define TREE_PROBLEM_SOLVER_H
 
 #define CONTAINER_FOR_QUEUE std::deque
 
@@ -9,23 +9,23 @@
 #include <algorithm>
 #include <mutex> 
 
-#include "../IProblem.h"
-#include "../Operation.h"
-#include "../Node.h"
-#include "../Amputation.h"
+#include "ISolver.h"
+#include "Operation.h"
+#include "Node.h"
+#include "Amputation.h"
 
 #include "Graph.h"
 
 template <typename T, class Compare = less<typename std::vector<Node<T> *>::value_type>>
-class GraphProblem : public IProblem<T>
+class TreeProblemSolver : public ISolver<T>
 {
 public:
-	GraphProblem(const Graph &graph)
+	TreeProblemSolver(const Graph &graph)
 	{
 		m_pGraph = &graph;
-		m_UsingAlgorithm = &GraphProblem::DFS;
+		m_UsingAlgorithm = &TreeProblemSolver::DFS;
 	}
-	~GraphProblem()
+	~TreeProblemSolver()
 	{
 		std::for_each(m_Operations->begin(), m_Operations->end(), [](Operation<T> *op) { delete op; });
 		delete m_Operations;
@@ -268,11 +268,11 @@ protected:
 	std::list<Amputation<T> *> *m_Amputations;
 	std::mutex m_Mutex;
 
-	typedef void(GraphProblem::*Algo)(Node<T> *);
+	typedef void(TreeProblemSolver::*Algo)(Node<T> *);
 	Algo m_UsingAlgorithm;
 
 	// when we change answer, we have to recalculate amputations
 	T m_Answer;
 };
 
-#endif /* GRAPH_PROBLEM_H */
+#endif /* TREE_PROBLEM_SOLVER_H */
