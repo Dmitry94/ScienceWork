@@ -1,5 +1,5 @@
-#ifndef GRAPH_PAINTING_H
-#define GRAPH_PAINTING_H
+#ifndef GRAPH_PAINTING_PROBLEM_SOLVER_H
+#define GRAPH_PAINTING_PROBLEM_SOLVER_H
 
 #include "../TreeAlgsParallization/TreeProblemSolver.h"
 
@@ -7,11 +7,11 @@
 #include "GraphPaintingGenerator.h"
 #include "GraphPaintingAmputation.h"
 
-class GraphPainting : public TreeProblemSolver<PartialPaint, PaintingRating>
+class GraphPaintingProblemSolver : public TreeProblemSolver<PartialPaint, PaintingRating>
 {
 	const Graph *m_pGraph;
 public:
-	GraphPainting(const Graph &graph)
+	GraphPaintingProblemSolver(const Graph &graph)
 		: TreeProblemSolver<PartialPaint, PaintingRating>()
 	{
 		m_pGraph = &graph;
@@ -55,4 +55,4 @@ protected:
 	}
 };
 
-#endif /* GRAPH_PAINTING_H */
+#endif /* GRAPH_PAINTING_PROBLEM_SOLVER_H */

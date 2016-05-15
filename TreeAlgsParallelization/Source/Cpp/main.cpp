@@ -5,7 +5,7 @@
 #include "../Headers/TreeAlgsParallization/Node.h"
 #include "../Headers/TreeAlgsParallization/Graph.h"
 
-#include "../Headers/GraphPainting/GraphPainting.h"
+#include "../Headers/GraphPainting/GraphPaintingProblemSolver.h"
 
 #include "../Headers/HTML/HTML_Logger.h"
 
@@ -48,7 +48,7 @@ int main() {
 			long long start_time, end_time;
 
 			PartialPaint start(1, VertexColorPair(0, 0));
-			GraphPainting solver(graph);
+			GraphPaintingProblemSolver solver(graph);
 			PartialPaint answer, parallelAnswer;
 			bool isGood;
 

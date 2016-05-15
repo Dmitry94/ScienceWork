@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Headers\GraphPainting\GraphPainting.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingAmputation.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
@@ -25,6 +22,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingGenerator.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingProblemSolver.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

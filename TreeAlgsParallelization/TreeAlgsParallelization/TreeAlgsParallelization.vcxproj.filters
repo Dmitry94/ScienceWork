@@ -33,6 +33,9 @@
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\TreeProblemSolver.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Headers\SAT\SATProblemSolver.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

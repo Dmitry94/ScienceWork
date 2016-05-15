@@ -2,8 +2,21 @@
 #define SAT_STRUCTURES_H
 
 #include <unordered_map>
+#include "../../Headers/TreeAlgsParallization/Node.h"
 
-typedef std::unordered_map<std::string, bool> PartialSubstitution;
+class PartialSubstitution : public std::unordered_map<std::string, bool>
+{
+public:
+	unsigned countOfVariables;
+};
 
+class SubstitutionRating
+{
+public:
+	bool operator()(Node<PartialSubstitution> const*p1, Node<PartialSubstitution> const*p2) const
+	{
+		return p1->value.size() > p2->value.size();
+	}
+};
 
 #endif /* SAT_STRUCTURES_H */

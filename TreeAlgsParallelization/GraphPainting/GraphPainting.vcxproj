@@ -115,7 +115,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingGenerator.h" />
-    <ClInclude Include="..\Source\Headers\GraphPainting\GraphPainting.h" />
+    <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingProblemSolver.h" />
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingAmputation.h" />
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingStructures.h" />
   </ItemGroup>
