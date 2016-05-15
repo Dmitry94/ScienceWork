@@ -1,4 +1,4 @@
-#include "../Headers/TreeAlgsParallization/Graph.h"
+#include "../../Headers/TreeAlgsParallization/Graph.h"
 
 Graph::Graph(const std::string & rFileName, std::ios_base::openmode mode)
 

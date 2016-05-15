@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphPainting", "GraphPaint
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demonstration", "Demonstration\Demonstration.vcxproj", "{A6E7E8C7-6508-477C-994E-5DCB956B8DAA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SAT", "SAT\SAT.vcxproj", "{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{A6E7E8C7-6508-477C-994E-5DCB956B8DAA}.Release|x64.Build.0 = Release|x64
 		{A6E7E8C7-6508-477C-994E-5DCB956B8DAA}.Release|x86.ActiveCfg = Release|Win32
 		{A6E7E8C7-6508-477C-994E-5DCB956B8DAA}.Release|x86.Build.0 = Release|Win32
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Debug|x64.ActiveCfg = Debug|x64
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Debug|x64.Build.0 = Debug|x64
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Debug|x86.ActiveCfg = Debug|Win32
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Debug|x86.Build.0 = Debug|Win32
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Release|x64.ActiveCfg = Release|x64
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Release|x64.Build.0 = Release|x64
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Release|x86.ActiveCfg = Release|Win32
+		{6EC3AEBB-35C2-4438-9BCD-40ECF43A34D7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
