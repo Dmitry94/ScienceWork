@@ -14,7 +14,7 @@ int main()
 	{
 		Expression *ex = generateRandomExpression(i + 2, 2);
 		PartialSubstitution subs;
-		for (int j = 0; j <= i; j++)
+		for (int j = 0; j <= i + 1; j++)
 		{
 			subs.insert(pair<string, bool>("x" + to_string(j), 1));
 		}

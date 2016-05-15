@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Headers\SAT\Expression.h" />
+    <ClInclude Include="..\Source\Headers\SAT\Logic3.h" />
     <ClInclude Include="..\Source\Headers\SAT\SAT_Structures.h" />
   </ItemGroup>
   <ItemGroup>

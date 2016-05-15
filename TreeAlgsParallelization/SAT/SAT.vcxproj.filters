@@ -29,5 +29,8 @@
     <ClInclude Include="..\Source\Headers\SAT\SAT_Structures.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Headers\SAT\Logic3.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

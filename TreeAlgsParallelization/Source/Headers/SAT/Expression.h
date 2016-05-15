@@ -3,6 +3,7 @@
 
 #include <string>
 #include "SAT_Structures.h"
+#include "Logic3.h"
 
 class Expression {
 public:
@@ -49,6 +50,6 @@ public:
 
 void freeExpression(Expression *exp);
 Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCountOneVariableAppearances);
-bool applySubstitution(Expression *exp, const PartialSubstitution &substitution);
+Logic3 applySubstitution(Expression *exp, const PartialSubstitution &substitution);
 
 #endif EXPRESSION_H

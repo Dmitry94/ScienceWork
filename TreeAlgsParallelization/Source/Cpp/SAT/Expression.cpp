@@ -2,6 +2,7 @@
 #include <unordered_set>
 
 #include "../../Headers/SAT/Expression.h"
+#include "../../Headers/SAT/Logic3.h"
 
 using namespace std;
 
@@ -133,43 +134,52 @@ Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCoun
 	return answer;
 }
 
-bool applySubstitution(Expression *exp, const PartialSubstitution &substitution)
+Logic3 applySubstitution(Expression *exp, const PartialSubstitution &substitution)
 {
 	Disjunction *dis;
 	Conjunction *con;
 	Negative *neg;
 	Variable *var;
 	Constant *constant;
-	// -1 --- undefined
-	// 0 --- false
-	// 1 --- true
-	int answer;
+	Logic3 answer;
 	if ((dis = dynamic_cast<Disjunction *>(exp)) != nullptr)
 	{
-		answer = applySubstitution(dis->left, substitution) || applySubstitution(dis->right, substitution);
+		Logic3 fstOperand = applySubstitution(dis->left, substitution);
+		Logic3 sndOperand = applySubstitution(dis->right, substitution);
+		answer = Logic3_Operations::getDisjunction(fstOperand, sndOperand);
 	}
 	else if ((con = dynamic_cast<Conjunction *>(exp)) != nullptr)
 	{
-		answer = applySubstitution(con->left, substitution) && applySubstitution(con->right, substitution);
+		Logic3 fstOperand = applySubstitution(con->left, substitution);
+		Logic3 sndOperand = applySubstitution(con->right, substitution);
+		answer = Logic3_Operations::getConjuction(fstOperand, sndOperand);
 	}
 	else if ((neg = dynamic_cast<Negative*>(exp)) != nullptr)
 	{
-		int subVal = applySubstitution(neg->expr, substitution);
-		if (subVal == -1)
-			return -1;
-		else
-			answer = !subVal;
+		Logic3 operand = applySubstitution(neg->expr, substitution);
+		answer = Logic3_Operations::getNegative(operand);
 	}
 	else if((var = dynamic_cast<Variable*>(exp)) != nullptr)
 	{
 		if (substitution.find(var->name) != substitution.end())
-			answer = substitution.at(var->name);
+			answer = Logic3(substitution.at(var->name));
 		else
-			answer = -1;
+			answer = Logic3();
 	}
 	else if ((constant = dynamic_cast<Constant*>(exp)) != nullptr)
 	{
-		answer = constant->value;
+		answer = Logic3(constant->value);
 	}
 	return answer;
+}
+
+std::ostream& operator<<(std::ostream& os, const Logic3 value)
+{
+	if (value == TRUE)
+		os << "TRUE";
+	else if (value == FALSE)
+		os << "FALSE";
+	else
+		os << "UNDEFINED";
+	return os;
 }
