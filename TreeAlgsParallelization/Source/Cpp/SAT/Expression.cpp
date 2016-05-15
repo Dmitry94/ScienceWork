@@ -132,3 +132,44 @@ Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCoun
 
 	return answer;
 }
+
+bool applySubstitution(Expression *exp, const PartialSubstitution &substitution)
+{
+	Disjunction *dis;
+	Conjunction *con;
+	Negative *neg;
+	Variable *var;
+	Constant *constant;
+	// -1 --- undefined
+	// 0 --- false
+	// 1 --- true
+	int answer;
+	if ((dis = dynamic_cast<Disjunction *>(exp)) != nullptr)
+	{
+		answer = applySubstitution(dis->left, substitution) || applySubstitution(dis->right, substitution);
+	}
+	else if ((con = dynamic_cast<Conjunction *>(exp)) != nullptr)
+	{
+		answer = applySubstitution(con->left, substitution) && applySubstitution(con->right, substitution);
+	}
+	else if ((neg = dynamic_cast<Negative*>(exp)) != nullptr)
+	{
+		int subVal = applySubstitution(neg->expr, substitution);
+		if (subVal == -1)
+			return -1;
+		else
+			answer = !subVal;
+	}
+	else if((var = dynamic_cast<Variable*>(exp)) != nullptr)
+	{
+		if (substitution.find(var->name) != substitution.end())
+			answer = substitution.at(var->name);
+		else
+			answer = -1;
+	}
+	else if ((constant = dynamic_cast<Constant*>(exp)) != nullptr)
+	{
+		answer = constant->value;
+	}
+	return answer;
+}

@@ -9,10 +9,12 @@
 
 class GraphPainting : public TreeProblemSolver<PartialPaint, PaintingRating>
 {
+	const Graph *m_pGraph;
 public:
 	GraphPainting(const Graph &graph)
-		: TreeProblemSolver<PartialPaint, PaintingRating>(graph)
+		: TreeProblemSolver<PartialPaint, PaintingRating>()
 	{
+		m_pGraph = &graph;
 		initOperations();
 	}
 protected:

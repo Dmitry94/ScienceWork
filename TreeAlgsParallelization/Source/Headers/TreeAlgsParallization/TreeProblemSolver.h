@@ -20,9 +20,8 @@ template <typename T, class Compare = less<typename std::vector<Node<T> *>::valu
 class TreeProblemSolver : public ISolver<T>
 {
 public:
-	TreeProblemSolver(const Graph &graph)
+	TreeProblemSolver()
 	{
-		m_pGraph = &graph;
 		m_UsingAlgorithm = &TreeProblemSolver::DFS;
 	}
 	~TreeProblemSolver()
@@ -262,7 +261,6 @@ protected:
 	virtual void initOperations() = 0;
 
 	/******************************** MEMBERS ********************************/
-	const Graph *m_pGraph;
 	std::vector<Operation<T> *> *m_Operations;
 	std::list<Amputation<T> *> *m_Amputations;
 	std::mutex m_Mutex;

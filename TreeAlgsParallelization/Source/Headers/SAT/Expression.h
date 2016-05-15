@@ -2,6 +2,7 @@
 #define EXPRESSION_H
 
 #include <string>
+#include "SAT_Structures.h"
 
 class Expression {
 public:
@@ -48,6 +49,6 @@ public:
 
 void freeExpression(Expression *exp);
 Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCountOneVariableAppearances);
-
+bool applySubstitution(Expression *exp, const PartialSubstitution &substitution);
 
 #endif EXPRESSION_H
