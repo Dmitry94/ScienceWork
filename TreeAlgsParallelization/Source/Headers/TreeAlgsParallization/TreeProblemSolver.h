@@ -123,14 +123,13 @@ public:
 			}
 			else
 			{
-				int i = 0;
-				while (!nodesQueue.empty())
+				for (int i = 0; i < queueSize; i++)
 				{
 					// get node
 					Node<T> *tmp = nodesQueue.top();
 					nodesQueue.pop();
 					// run thread
-					threads[i++] = thread(m_UsingAlgorithm, this, tmp);
+					threads[i] = thread(m_UsingAlgorithm, this, tmp);
 				}
 			}
 			for_each(threads.begin(), threads.end(), [](thread &t) { if (t.joinable()) t.join(); });
