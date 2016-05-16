@@ -38,5 +38,8 @@
     <ClInclude Include="..\Source\Headers\SAT\SATSubstitutionGenerator.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Headers\SAT\SATAmputation.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
