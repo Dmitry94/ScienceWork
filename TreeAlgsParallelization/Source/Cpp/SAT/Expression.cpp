@@ -183,3 +183,35 @@ std::ostream& operator<<(std::ostream& os, const Logic3 value)
 		os << "UNDEFINED";
 	return os;
 }
+
+unsigned calcCountOfUniqueVariables(const Expression *expr, unordered_set<string> &usedVars)
+{
+	const Disjunction *dis;
+	const Conjunction *con;
+	const Negative *neg;
+	const Variable *var;
+	const Constant *constant;
+	unsigned count;
+	if ((dis = dynamic_cast<const Disjunction *>(expr)) != nullptr)
+	{
+		count += calcCountOfUniqueVariables(dis->left, usedVars) + calcCountOfUniqueVariables(dis->right, usedVars);
+	}
+	else if ((con = dynamic_cast<const Conjunction *>(expr)) != nullptr)
+	{
+		count += calcCountOfUniqueVariables(con->left, usedVars) + calcCountOfUniqueVariables(con->right, usedVars);
+	}
+	else if ((neg = dynamic_cast<const Negative*>(expr)) != nullptr)
+	{
+		count += calcCountOfUniqueVariables(neg->expr, usedVars);
+	}
+	else if ((var = dynamic_cast<const Variable*>(expr)) != nullptr)
+	{
+		if (usedVars.find(var->name) == usedVars.end())
+		{
+			count++;
+			usedVars.insert(var->name);
+		}
+	}
+
+	return count;
+}

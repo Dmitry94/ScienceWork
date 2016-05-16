@@ -23,6 +23,7 @@ public:
 	TreeProblemSolver()
 	{
 		m_UsingAlgorithm = &TreeProblemSolver::DFS;
+		initOperations();
 	}
 	~TreeProblemSolver()
 	{
@@ -258,7 +259,7 @@ protected:
 	virtual bool isBetterAnswer(const T &, const T &) const = 0;
 	virtual T getObviousAnswer() const = 0;
 	virtual void recalcAmputations() = 0;
-	virtual void initOperations() = 0;
+	virtual void initOperations() {};
 
 	/******************************** MEMBERS ********************************/
 	std::vector<Operation<T> *> *m_Operations;

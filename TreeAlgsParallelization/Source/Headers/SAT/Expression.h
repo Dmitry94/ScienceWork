@@ -51,5 +51,6 @@ public:
 void freeExpression(Expression *exp);
 Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCountOneVariableAppearances);
 Logic3 applySubstitution(Expression *exp, const PartialSubstitution &substitution);
+unsigned calcCountOfUniqueVariables(const Expression *expr, std::unordered_set<std::string> &usedVars);
 
 #endif EXPRESSION_H
