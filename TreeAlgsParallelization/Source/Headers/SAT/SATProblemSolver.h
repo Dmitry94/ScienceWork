@@ -21,26 +21,22 @@ public:
 protected:
 	bool isAnswer(const PartialSubstitution &substitution) const override
 	{
-		//
-		return false;
+		// если с данной подстановкой формула истина, значит мы нашли решение
+		Logic3 expressionValue = applySubstitution(m_Expression, substitution);
+		return expressionValue == TRUE ? true : false;
 	}
 	bool isBetterAnswer(const PartialSubstitution &oldAnswer, const PartialSubstitution &newAnswer) const override
 	{
-		return true;
+		return oldAnswer.size() != 0;
 	}
 	PartialSubstitution getObviousAnswer() const override
 	{
 		PartialSubstitution subs;
-		for (int j = 0; j <= m_UniqueVars; j++)
-		{
-			subs.insert(std::pair<std::string, bool>("x" + std::to_string(j), 0));
-		}
 		return subs;
 	}
 	void recalcAmputations() override
 	{
 		Amputation<PartialSubstitution> *amputation = new SATAmputation(m_Answer);
-
 		if (m_Amputations != nullptr)
 		{
 			std::for_each(m_Amputations->begin(), m_Amputations->end(), [](Amputation<PartialSubstitution> *amp) { delete amp; });

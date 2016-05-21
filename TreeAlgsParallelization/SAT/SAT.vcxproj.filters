@@ -41,5 +41,8 @@
     <ClInclude Include="..\Source\Headers\SAT\SATAmputation.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Headers\SAT\SATProblemSolver.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

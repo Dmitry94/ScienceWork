@@ -134,39 +134,39 @@ Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCoun
 	return answer;
 }
 
-Logic3 applySubstitution(Expression *exp, const PartialSubstitution &substitution)
+Logic3 applySubstitution(const Expression *exp, const PartialSubstitution &substitution)
 {
-	Disjunction *dis;
-	Conjunction *con;
-	Negative *neg;
-	Variable *var;
-	Constant *constant;
+	const Disjunction *dis;
+	const Conjunction *con;
+	const Negative *neg;
+	const Variable *var;
+	const Constant *constant;
 	Logic3 answer;
-	if ((dis = dynamic_cast<Disjunction *>(exp)) != nullptr)
+	if ((dis = dynamic_cast<const Disjunction *>(exp)) != nullptr)
 	{
 		Logic3 fstOperand = applySubstitution(dis->left, substitution);
 		Logic3 sndOperand = applySubstitution(dis->right, substitution);
 		answer = Logic3_Operations::getDisjunction(fstOperand, sndOperand);
 	}
-	else if ((con = dynamic_cast<Conjunction *>(exp)) != nullptr)
+	else if ((con = dynamic_cast<const Conjunction *>(exp)) != nullptr)
 	{
 		Logic3 fstOperand = applySubstitution(con->left, substitution);
 		Logic3 sndOperand = applySubstitution(con->right, substitution);
 		answer = Logic3_Operations::getConjuction(fstOperand, sndOperand);
 	}
-	else if ((neg = dynamic_cast<Negative*>(exp)) != nullptr)
+	else if ((neg = dynamic_cast<const Negative*>(exp)) != nullptr)
 	{
 		Logic3 operand = applySubstitution(neg->expr, substitution);
 		answer = Logic3_Operations::getNegative(operand);
 	}
-	else if((var = dynamic_cast<Variable*>(exp)) != nullptr)
+	else if((var = dynamic_cast<const Variable*>(exp)) != nullptr)
 	{
 		if (substitution.find(var->name) != substitution.end())
 			answer = Logic3(substitution.at(var->name));
 		else
 			answer = Logic3();
 	}
-	else if ((constant = dynamic_cast<Constant*>(exp)) != nullptr)
+	else if ((constant = dynamic_cast<const Constant*>(exp)) != nullptr)
 	{
 		answer = Logic3(constant->value);
 	}
@@ -191,7 +191,7 @@ unsigned calcCountOfUniqueVariables(const Expression *expr, unordered_set<string
 	const Negative *neg;
 	const Variable *var;
 	const Constant *constant;
-	unsigned count;
+	unsigned count = 0;
 	if ((dis = dynamic_cast<const Disjunction *>(expr)) != nullptr)
 	{
 		count += calcCountOfUniqueVariables(dis->left, usedVars) + calcCountOfUniqueVariables(dis->right, usedVars);

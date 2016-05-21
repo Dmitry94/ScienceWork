@@ -2,6 +2,7 @@
 #define EXPRESSION_H
 
 #include <string>
+#include <unordered_set>
 #include "SAT_Structures.h"
 #include "Logic3.h"
 
@@ -50,7 +51,7 @@ public:
 
 void freeExpression(Expression *exp);
 Expression* generateRandomExpression(unsigned countOfVariables, unsigned maxCountOneVariableAppearances);
-Logic3 applySubstitution(Expression *exp, const PartialSubstitution &substitution);
+Logic3 applySubstitution(const Expression *exp, const PartialSubstitution &substitution);
 unsigned calcCountOfUniqueVariables(const Expression *expr, std::unordered_set<std::string> &usedVars);
 
 #endif EXPRESSION_H

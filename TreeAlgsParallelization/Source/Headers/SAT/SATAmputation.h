@@ -13,8 +13,7 @@ public:
 	}
 	bool isNeedToAmputate(const PartialSubstitution& painting) const override
 	{
-		// TODO return is answer already exists
-		return true;
+		return m_Substitution.size() != 0;
 	}
 
 private:

@@ -114,7 +114,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Headers\SAT\SATProblemSolver.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Amputation.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Graph.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\TreeProblemSolver.h" />
