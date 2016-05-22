@@ -21,3 +21,12 @@ vector<PartialSubstitution> SATSubstitutionGenerator::getNextGeneration(const Pa
 
 	return answer;
 }
+
+bool SATSubstitutionGenerator::isAnswer(const Expression &expr, const PartialSubstitution &subs)
+{
+	if (subs.size() == 0)
+		return true;
+
+	Logic3 answer = applySubstitution(&expr, subs);
+	return answer == TRUE;
+}

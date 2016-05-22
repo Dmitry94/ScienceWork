@@ -7,6 +7,11 @@
 class PartialSubstitution : public std::unordered_map<std::string, bool>
 {
 public:
+	PartialSubstitution(unsigned countOfVariables) : std::unordered_map<std::string, bool>()
+	{
+		this->countOfVariables = countOfVariables;
+	}
+	PartialSubstitution() : std::unordered_map<std::string, bool>() {}
 	unsigned countOfVariables;
 };
 

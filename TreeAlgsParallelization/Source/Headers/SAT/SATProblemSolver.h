@@ -17,6 +17,7 @@ public:
 		m_Expression = &expr;
 		std::unordered_set<std::string> uniqueVars;
 		m_UniqueVars = calcCountOfUniqueVariables(&expr, uniqueVars);
+		initOperations();
 	}
 protected:
 	bool isAnswer(const PartialSubstitution &substitution) const override
@@ -27,7 +28,8 @@ protected:
 	}
 	bool isBetterAnswer(const PartialSubstitution &oldAnswer, const PartialSubstitution &newAnswer) const override
 	{
-		return oldAnswer.size() != 0;
+		// если old пустой, значит решения нет, значит найденный ответ лучше
+		return oldAnswer.size() == 0;
 	}
 	PartialSubstitution getObviousAnswer() const override
 	{

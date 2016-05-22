@@ -2,12 +2,12 @@
 #include <time.h>
 #include <vector>
 
-#include "../Headers/TreeAlgsParallization/Node.h"
-#include "../Headers/TreeAlgsParallization/Graph.h"
+#include "../../Headers/TreeAlgsParallization/Node.h"
+#include "../../Headers/TreeAlgsParallization/Graph.h"
 
-#include "../Headers/GraphPainting/GraphPaintingProblemSolver.h"
+#include "../../Headers/GraphPainting/GraphPaintingProblemSolver.h"
 
-#include "../Headers/HTML/HTML_Logger.h"
+#include "../../Headers/HTML/HTML_Logger.h"
 
 using namespace std;
 
@@ -97,7 +97,7 @@ int main() {
 			, to_string(oneThreadTimeAverage / manyThreadTimeAverage)};
 
 		log.addLogLine(curResults);
-		log.createFile("@../../res.html");
+		log.createFile("@../../GraphPainting_Results.html");
 	}
 
 	std::system("pause");

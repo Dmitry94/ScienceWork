@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Cpp\GraphPainting\GenerateNewPainting.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\Source\Cpp\GraphPainting\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TreeAlgsParallelization\TreeAlgsParallelization.vcxproj">
