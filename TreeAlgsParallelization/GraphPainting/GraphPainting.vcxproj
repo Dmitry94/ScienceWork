@@ -118,10 +118,12 @@
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingProblemSolver.h" />
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingAmputation.h" />
     <ClInclude Include="..\Source\Headers\GraphPainting\GraphPaintingStructures.h" />
+    <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Graph.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Cpp\GraphPainting\GenerateNewPainting.cpp" />
     <ClCompile Include="..\Source\Cpp\GraphPainting\main.cpp" />
+    <ClCompile Include="..\Source\Cpp\TreeAlgsParallization\Graph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TreeAlgsParallelization\TreeAlgsParallelization.vcxproj">

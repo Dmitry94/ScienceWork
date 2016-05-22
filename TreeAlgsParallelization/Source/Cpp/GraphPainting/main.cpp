@@ -29,7 +29,7 @@ int main() {
 	int threadsCount = 18;
 	double countOfPatterns = 3.0;
 
-	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", to_string(threadsCount) + " thread Time", "Performance" };
+	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", to_string(threadsCount) + " thread Time", "Rate" };
 	HTML_Logger log(headers);
 
 	cout << "Calculating..." << endl;

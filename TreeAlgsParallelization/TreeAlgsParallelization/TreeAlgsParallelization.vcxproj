@@ -115,14 +115,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Amputation.h" />
-    <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Graph.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\TreeProblemSolver.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\ISolver.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Node.h" />
     <ClInclude Include="..\Source\Headers\TreeAlgsParallization\Operation.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\Cpp\TreeAlgsParallization\Graph.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
