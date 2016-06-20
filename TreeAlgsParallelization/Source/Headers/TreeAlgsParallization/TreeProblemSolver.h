@@ -8,15 +8,14 @@
 #include <thread>
 #include <algorithm>
 #include <mutex> 
+#include<omp.h>
 
 #include "ISolver.h"
 #include "Operation.h"
 #include "Node.h"
 #include "Amputation.h"
 
-#include "Graph.h"
-
-template <typename T, class Compare = less<typename std::vector<Node<T> *>::value_type>>
+template <typename T, class Compare = less<typename CONTAINER_FOR_QUEUE<Node<T> *>::value_type>>
 class TreeProblemSolver : public ISolver<T>
 {
 public:
@@ -102,39 +101,68 @@ public:
 			delete tmp;
 		}
 
-		/********************* IF WE COLLECT ENOUGH FOR PARALLEL ALGO, THEN START IT *********************/
-		vector <thread> threads(countOfThreads);
-		// for each node run its thread
-		while (!nodesQueue.empty())
+		///********************* IF WE COLLECT ENOUGH FOR PARALLEL ALGO, THEN START IT *********************/
+		//vector <thread> threads(countOfThreads);
+		//// for each node run its thread
+		//while (!nodesQueue.empty())
+		//{
+		//	// if we have queueSize > countOfThreads, we have to run tasks by groups with size = countOfThreads
+		//	if (queueSize > countOfThreads)
+		//	{
+		//		for (int i = 0; i < countOfThreads; i++)
+		//		{
+		//			// get node
+		//			Node<T> *tmp = nodesQueue.top();
+		//			nodesQueue.pop();
+		//			queueSize--;
+		//			// run thread
+		//			threads[i] = thread(m_UsingAlgorithm, this, tmp);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		for (int i = 0; i < queueSize; i++)
+		//		{
+		//			// get node
+		//			Node<T> *tmp = nodesQueue.top();
+		//			nodesQueue.pop();
+		//			// run thread
+		//			threads[i] = thread(m_UsingAlgorithm, this, tmp);
+		//		}
+		//	}
+		//	for_each(threads.begin(), threads.end(), [](thread &t) { if (t.joinable()) t.join(); });
+		//}
+		//
+		//threads.clear();
+		double *times = new double[countOfThreads];
+		for (int i = 0; i < countOfThreads; i++)
+			times[i] = 0.0;
+		#pragma omp parallel num_threads(countOfThreads)
 		{
-			// if we have queueSize > countOfThreads, we have to run tasks by groups with size = countOfThreads
-			if (queueSize > countOfThreads)
+			#pragma omp for schedule(dynamic, 1) nowait
+			for (int i = 0; i < queueSize; i++)
 			{
-				for (int i = 0; i < countOfThreads; i++)
+				Node<T> *tmp;
+				#pragma omp critical
 				{
-					// get node
-					Node<T> *tmp = nodesQueue.top();
+					tmp = nodesQueue.top();
 					nodesQueue.pop();
-					queueSize--;
-					// run thread
-					threads[i] = thread(m_UsingAlgorithm, this, tmp);
 				}
+				double st = omp_get_wtime();
+				DFS(tmp);
+				double end = omp_get_wtime();
+				times[omp_get_thread_num()] += (end - st);
 			}
-			else
-			{
-				for (int i = 0; i < queueSize; i++)
-				{
-					// get node
-					Node<T> *tmp = nodesQueue.top();
-					nodesQueue.pop();
-					// run thread
-					threads[i] = thread(m_UsingAlgorithm, this, tmp);
-				}
-			}
-			for_each(threads.begin(), threads.end(), [](thread &t) { if (t.joinable()) t.join(); });
 		}
-		
-		threads.clear();
+
+		//std::cout << std::endl;
+		//for (int i = 0; i < countOfThreads; i++)
+		//{
+		//	times[i] /= 12.0;
+		//	std::cout << times[i] << std::endl;
+		//}
+		//std::getchar();
+
 		// return result
 		return m_Answer;
 	}
@@ -205,25 +233,35 @@ protected:
 			nodesStack.pop();
 
 			// if current node need to be cut
-			m_Mutex.lock();
-			if (isAnyAmputation(tmp->value))
+			//m_Mutex.lock();
+			bool f = false;
+			#pragma omp critical 
 			{
-				delete tmp;
-				m_Mutex.unlock();
-				continue;
+				if (isAnyAmputation(tmp->value))
+				{
+					delete tmp;
+					f = true;
+					//m_Mutex.unlock();
+					//continue;
+				}
+				//m_Mutex.unlock();
 			}
-			m_Mutex.unlock();
+			if (f)
+				continue;
 
 			// check is it answer then skip and it it's better than curAnswer, then lock and assign
 			if (isAnswer(tmp->value))
 			{
-				m_Mutex.lock();
-				if (isBetterAnswer(m_Answer, tmp->value))
+				//m_Mutex.lock();
+				#pragma omp critical
 				{
-					m_Answer = tmp->value;
-					recalcAmputations();
+					if (isBetterAnswer(m_Answer, tmp->value))
+					{
+						m_Answer = tmp->value;
+						recalcAmputations();
+					}
+					//m_Mutex.unlock();
 				}
-				m_Mutex.unlock();
 				delete tmp;
 				continue;
 			}

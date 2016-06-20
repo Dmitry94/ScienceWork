@@ -1,4 +1,4 @@
-#include "../../Headers/TreeAlgsParallization/Graph.h"
+#include "../../Headers/GraphPainting/Graph.h"
 
 Graph::Graph(const std::string & rFileName, std::ios_base::openmode mode)
 
@@ -77,7 +77,7 @@ void Graph::writeIntoFile(const std::string & rFileName, std::ios_base::openmode
 			out.write((char *)&(count), sizeof(count));
 			for (typename GraphType::const_iterator it = m_Graph.cbegin(); it != m_Graph.cend(); it++)
 			{
-				int currentSize = it->size();
+				int currentSize = (int)it->size();
 				out.write((char *)&(currentSize), sizeof(currentSize));
 				for (typename std::list<int>::const_iterator itInside = it->cbegin(); itInside != it->cend(); itInside++)
 				{

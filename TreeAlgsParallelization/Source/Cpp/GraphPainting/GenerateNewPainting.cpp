@@ -1,5 +1,5 @@
 #include "../../Headers/GraphPainting/GraphPaintingGenerator.h"
-#include "../../Headers/TreeAlgsParallization/Graph.h"
+#include "../../Headers/GraphPainting/Graph.h"
 
 #include <list>
 #include <vector>

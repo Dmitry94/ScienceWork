@@ -4,7 +4,7 @@
 #include <list>
 
 #include "GraphPaintingStructures.h"
-#include "../TreeAlgsParallization/Graph.h"
+#include "Graph.h"
 #include "../TreeAlgsParallization/Operation.h"
 
 

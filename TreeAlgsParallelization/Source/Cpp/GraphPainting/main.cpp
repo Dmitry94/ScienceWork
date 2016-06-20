@@ -1,9 +1,10 @@
 ﻿#include <iostream>
 #include <time.h>
 #include <vector>
+#include <omp.h>
 
 #include "../../Headers/TreeAlgsParallization/Node.h"
-#include "../../Headers/TreeAlgsParallization/Graph.h"
+#include "../../Headers/GraphPainting/Graph.h"
 
 #include "../../Headers/GraphPainting/GraphPaintingProblemSolver.h"
 
@@ -26,15 +27,16 @@ int main() {
 
 	int minVertexCount = 30;
 	int maxVertexCount = 70;
-	int threadsCount = 18;
-	double countOfPatterns = 3.0;
+	int threadsCount = omp_get_num_procs() * 3;
+	int cycleStep = 2;
+	double countOfPatterns = 1.0;
 
 	list<string> headers = { "Count of Vertexes", "Count of Edges", "One Thread Time", to_string(threadsCount) + " thread Time", "Rate" };
 	HTML_Logger log(headers);
 
 	cout << "Calculating..." << endl;
 
-	for (int count = minVertexCount; count <= maxVertexCount; count += 2)
+	for (int count = minVertexCount; count <= maxVertexCount; count += cycleStep)
 	{
 		cout << "Current graph has " << count << " vertexes...";
 		double oneThreadTimeAverage = 0, manyThreadTimeAverage = 0;

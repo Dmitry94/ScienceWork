@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <omp.h>
 
 #include "../Source/Headers/SAT/Expression.h"
 
@@ -15,7 +16,8 @@ int main()
 
 	int minVarsCount = 10;
 	int maxVarsCount = 40;
-	int threadsCount = 18;
+	int threadsCount = omp_get_num_procs() * 3;
+	int cycleStep = 5;
 	double countOfPatterns = 3.0;
 
 	list<string> headers = { "Count of unique vars", "Max count of each var apperiance", "One Thread Time", to_string(threadsCount) + " thread Time", "Rate" };
@@ -23,7 +25,7 @@ int main()
 
 	cout << "Calculating..." << endl;
 
-	for (int count = minVarsCount; count <= maxVarsCount; count += 2)
+	for (int count = minVarsCount; count <= maxVarsCount; count += cycleStep)
 	{
 		cout << "Current expression has " << count << " unique variables...";
 		double oneThreadTimeAverage = 0, manyThreadTimeAverage = 0;
