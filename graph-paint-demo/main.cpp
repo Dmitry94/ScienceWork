@@ -3,11 +3,9 @@
 #include <vector>
 #include <omp.h>
 
-#include "../../Headers/TreeAlgsParallization/Node.h"
-#include "../../Headers/GraphPainting/Graph.h"
-
-#include "../../Headers/GraphPainting/GraphPaintingProblemSolver.h"
-
+#include "pbab_node.h"
+#include "graph.h"
+#include "gpp_solver.h"
 #include "../../Headers/HTML/HTML_Logger.h"
 
 using namespace std;

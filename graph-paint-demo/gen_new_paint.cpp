@@ -1,10 +1,10 @@
-#include "../../Headers/GraphPainting/GraphPaintingGenerator.h"
-#include "../../Headers/GraphPainting/Graph.h"
-
 #include <list>
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+
+#include "graph.h"
+#include "gpp_generator.h"
 
 using namespace std;
 

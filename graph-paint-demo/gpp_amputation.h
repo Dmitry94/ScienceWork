@@ -1,5 +1,5 @@
-#ifndef GRAPH_PAINTING_AMPUTATION_H
-#define GRAPH_PAINTING_AMPUTATION_H
+#ifndef GPP_AMPUTATION_H
+#define GPP_AMPUTATION_H
 
 #include "../TreeAlgsParallization/Amputation.h"
 #include "GraphPaintingStructures.h"
@@ -20,4 +20,4 @@ private:
 	PartialPaint m_CurAnswer;
 };
 
-#endif /* GRAPH_PAINTING_AMPUTATION_H */
+#endif /* GPP_AMPUTATION_H */
