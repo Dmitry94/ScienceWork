@@ -47,8 +47,8 @@ public:
     virtual std::string get_string_repr() const override;
 
 private:
-    const std::string &tag_name;
-    const std::string &tag_value;
+    const std::string tag_name;
+    const std::string tag_value;
 };
 
 } // namespace html_logger

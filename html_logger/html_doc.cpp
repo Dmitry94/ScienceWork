@@ -14,9 +14,9 @@ HTMLDoc::~HTMLDoc()
     body.reset();
 }
 
-HTMLDoc::get_string_repr()
+std::string HTMLDoc::get_string_repr() const
 {
     return head->get_string_repr() + body->get_string_repr();
 }
 
-}
+}  // namespace html_logger

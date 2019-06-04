@@ -45,11 +45,18 @@ public:
      */
     void add_tag(std::unique_ptr<HTMLTag> tag);
 
+    /**
+     * Get HTML tag string representation.
+     *
+     * @return string of HTML tag.
+     */
+    std::string get_string_repr() const override;
+
 private:
     std::list<std::unique_ptr<HTMLTag>> tags;
 };
 
-}
+} // namespace html_logger
 
 
 #endif /* HTML_BODY_H */

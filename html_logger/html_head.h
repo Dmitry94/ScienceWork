@@ -16,6 +16,13 @@ public:
      * Construct tag: set value inside.
      */
     HTMLTitle(const std::string &tag_value);
+
+    /**
+     * Get HTML <title>...</title> string representation.
+     *
+     * @return string of <title> tag.
+     */
+    std::string get_string_repr() const override;
 };
 
 
@@ -26,6 +33,13 @@ public:
      * Construct tag: set value inside.
      */
     HTMLMeta(const std::string &tag_value);
+
+    /**
+     * Get HTML <meta>...</meta> string representation.
+     *
+     * @return string of <meta> tag.
+     */
+    std::string get_string_repr() const override;
 };
 
 
@@ -48,12 +62,19 @@ public:
      * Free all resources: meta tags and title.
      */
     virtual ~HTMLHead();
+
+    /**
+     * Get HTML <head>...</head> string representation.
+     *
+     * @return string of <head> tag.
+     */
+    std::string get_string_repr() const override;
 private:
     std::list<std::unique_ptr<HTMLMeta>> meta_tags;
     std::unique_ptr<HTMLTitle> title;
 };
 
-}
+} // namespace html_logger
 
 
 #endif /* HTML_HEAD */

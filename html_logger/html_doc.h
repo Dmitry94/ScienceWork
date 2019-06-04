@@ -27,11 +27,18 @@ public:
      * Free all resources: body and head of document will be freed.
      */
     virtual ~HTMLDoc();
+
+    /**
+     * Get HTML <html>...</html> string representation.
+     *
+     * @return string of <html> tag.
+     */
+    std::string get_string_repr() const;
 private:
     std::unique_ptr<HTMLHead> head;
     std::unique_ptr<HTMLBody> body;
 };
 
-}
+} // namespace html_logger
 
-#endif HTML_H
+#endif /* HTML_H */

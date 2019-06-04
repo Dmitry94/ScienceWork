@@ -19,7 +19,7 @@ class HTMLTableElement : public HTMLTag { };
 /**
  * Class for HTML table <td> tag.
  */
-class HTMLTableTd : public HTMLTableElement, HTMLSimpleTag {
+class HTMLTableTd : public HTMLSimpleTag {
 public:
     /**
      * Construct tag: set value inside.
@@ -139,6 +139,6 @@ private:
     std::list<std::unique_ptr<HTMLTableTr>> tr_elements;
 };
 
-} //namespace html_logger
+} // namespace html_logger
 
 #endif /* HTML_TABLE_H */
