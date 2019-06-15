@@ -9,4 +9,4 @@ the logger implementation.
 
 ## UML
 
-<img src="https://github.com/Dmitry94/pbab/tree/master/content/uml/html_logger_uml.png">
+<img src="../content/uml/html_logger_uml.png">
