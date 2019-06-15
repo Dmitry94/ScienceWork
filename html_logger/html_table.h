@@ -12,14 +12,25 @@ namespace html_logger {
 /**
  * HTML table element class. Just abstract class for define type.
  */
-class HTMLTableElement : public HTMLTag { };
+class HTMLTableElement : public HTMLTag {
+public:
+
+    /**
+     * Override string representation func.
+     *
+     * Return just empty line. Need to be non-abstract class.
+     *
+     * @return empty line
+     */
+    virtual std::string get_string_repr() const override;
+};
 
 
 
 /**
  * Class for HTML table <td> tag.
  */
-class HTMLTableTd : public HTMLSimpleTag {
+class HTMLTableTd : public HTMLTableElement, HTMLSimpleTag {
 public:
     /**
      * Construct tag: set value inside.

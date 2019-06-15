@@ -7,6 +7,10 @@
 namespace html_logger {
 
 
+std::string HTMLTableElement::get_string_repr() const {
+    return "";
+}
+
 HTMLTableTd::HTMLTableTd(const std::string &tag_value) : HTMLSimpleTag("td", tag_value)
 { }
 
