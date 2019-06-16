@@ -7,7 +7,6 @@ namespace pbab {
 /**
  * Abstract class of task solver.
  * It's assumed, that all logic will be inside derrived classes.
- * But each solver can give solution.
  *
  * T - type of solution.
  * Solution - some state of task, which fits to all specified conditions.
@@ -31,6 +30,12 @@ public:
 
     /** Each solver should say, if some state is solution. */
     virtual bool is_solution(const T&) const = 0;
+
+    /**
+     * Find out, is first solution better than second.
+     * @return corresponfing flag
+     */
+    static virtual bool is_better_solution(const T&, const T&) = 0;
 
     /** Virtual destructor. */
     virtual ~Solver() = 0;
