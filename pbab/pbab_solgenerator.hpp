@@ -1,5 +1,5 @@
-#ifndef PBAB_SOLGENERATOR_H
-#define PBAB_SOLGENERATOR_H
+#ifndef PBAB_SOLGENERATOR_HPP
+#define PBAB_SOLGENERATOR_HPP
 
 #include <vector>
 
@@ -17,4 +17,4 @@ public:
 
 } // namespace pbab
 
-#endif /* PBAB_SOLGENERATOR_H */
+#endif /* PBAB_SOLGENERATOR_HPP */

@@ -1,5 +1,5 @@
-#ifndef PBAB_SOLVER_H
-#define PBAB_SOLVER_H
+#ifndef PBAB_SOLVER_HPP
+#define PBAB_SOLVER_HPP
 
 
 namespace pbab {
@@ -38,4 +38,4 @@ public:
 
 } // namespace pbab
 
-#endif /* PBAB_SOLVER_H */
+#endif /* PBAB_SOLVER_HPP */

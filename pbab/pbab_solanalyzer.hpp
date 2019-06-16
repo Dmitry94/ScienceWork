@@ -1,5 +1,5 @@
-#ifndef PBAB_SOLANALYZER_H
-#define PBAB_SOLANALYZER_H
+#ifndef PBAB_SOLANALYZER_HPP
+#define PBAB_SOLANALYZER_HPP
 
 
 namespace pbab {
@@ -32,4 +32,4 @@ public:
 
 } // namespace pbab
 
-#endif /* PBAB_SOLANALYZER_H */
+#endif /* PBAB_SOLANALYZER_HPP */

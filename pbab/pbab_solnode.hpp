@@ -1,5 +1,5 @@
-#ifndef PBAB_SOLNODE_H
-#define PBAB_SOLNODE_H
+#ifndef PBAB_SOLNODE_HPP
+#define PBAB_SOLNODE_HPP
 
 namespace pbab {
 
@@ -27,4 +27,4 @@ struct SolNode {
 
 }
 
-#endif /* PBAB_SOLNODE_H */
+#endif /* PBAB_SOLNODE_HPP */
