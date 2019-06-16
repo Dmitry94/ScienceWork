@@ -1,6 +1,8 @@
 #ifndef PBAB_SOLNODE_HPP
 #define PBAB_SOLNODE_HPP
 
+#include <memory>
+
 namespace pbab {
 
 /**
@@ -12,13 +14,13 @@ struct SolNode {
     int level;
 
     /** link to the parent node */
-    const SolNode *parent;
+    const std::weak_ptr<SolNode> parent;
 
     /** solution of this node */
     T value;
 
     /** Initialization */
-    SolNode(T val, const Node *parent, int level = 0) {
+    SolNode(T val, const std::weak_ptr<SolNode> parent, int level = 0) {
         value = val;
         this->parent = parent;
         this->level = level;
