@@ -5,10 +5,22 @@
 
 namespace pbab {
 
+enum BABSolverBackendAlgo
+{
+    DFS = 0,
+    ASTAR = 1,
+    SMART_DFS = 2,
+    SMART_ASTAR = 3
+};
+
 /**
  * Abstract class of solver which is based on branch and bound method.
  */
 class BABSolver : public Solver {
+public:
+    BABSolver(BABSolverBackendAlgo backend_algo) {
+        this->backend_algo = backend_algo;
+    }
 protected:
     /**
      * Get the simpliest solution.
@@ -23,6 +35,7 @@ protected:
      */
     virtual void recalc_solanalyzers() = 0;
 
+    BABSolverBackendAlgo backend_algo;
 };
 
 }

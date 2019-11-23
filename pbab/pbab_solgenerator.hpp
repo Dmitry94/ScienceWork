@@ -12,6 +12,11 @@ namespace pbab {
 template <typename T>
 class SolGenerator {
 public:
+    /**
+     * Generate childs of the current solution.
+     *
+     * @return vector of new solutions
+     */
     virtual std::vector<T> generate_childs(const T&) const = 0;
 };
 
